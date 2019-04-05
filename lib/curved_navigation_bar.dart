@@ -12,6 +12,7 @@ class CurvedNavigationBar extends StatefulWidget {
   final ValueChanged<int> onTap;
   final Curve animationCurve;
   final Duration animationDuration;
+  final int height;
   _CurvedNavigationBarState state = new _CurvedNavigationBarState();
   CurvedNavigationBar(
       {Key key,
@@ -22,7 +23,8 @@ class CurvedNavigationBar extends StatefulWidget {
       this.backgroundColor = Colors.blueAccent,
       this.onTap,
       this.animationCurve = Curves.easeOut,
-      this.animationDuration = const Duration(milliseconds: 600)})
+      this.animationDuration = const Duration(milliseconds: 600),
+      this.height = 75})
       : assert(items != null),
         assert(items.length >= 2),
         assert(0 <= initialIndex && initialIndex < items.length),
@@ -69,7 +71,7 @@ class _CurvedNavigationBarState extends State<CurvedNavigationBar>
     Size size = MediaQuery.of(context).size;
     return Container(
       color: widget.backgroundColor,
-      height: 75.0,
+      height: widget.height,
       child: Stack(
         overflow: Overflow.visible,
         alignment: Alignment.bottomCenter,
@@ -82,7 +84,7 @@ class _CurvedNavigationBarState extends State<CurvedNavigationBar>
               child: Transform.translate(
                 offset: Offset(
                   0,
-                  -(1 - _buttonHide) * 80,
+                  -(1 - _buttonHide) * widget.height*0.9375,
                 ),
                 child: Material(
                   color: widget.buttonBackgroundColor ?? widget.color,
@@ -101,7 +103,7 @@ class _CurvedNavigationBarState extends State<CurvedNavigationBar>
               painter: NavCustomPainter(_pos, _length, widget.color),
               child: Container(
                 color: widget.backgroundColor,
-                height: 75.0,
+                height: widget.height,
               ),
             ),
           ),
@@ -117,6 +119,7 @@ class _CurvedNavigationBarState extends State<CurvedNavigationBar>
                     length: _length,
                     index: widget.items.indexOf(item),
                     child: item,
+                    height: widget.height,
                   );
                 }).toList())),
           ),
