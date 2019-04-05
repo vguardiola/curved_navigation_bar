@@ -4,11 +4,11 @@ class NavButton extends StatelessWidget {
   final double position;
   final int length;
   final int index;
-  final int height;
+  final double height;
   final ValueChanged<int> onTap;
   final Widget child;
 
-  NavButton({this.onTap, this.position, this.length, this.index, this.child, this.height=75});
+  NavButton({this.onTap, this.position, this.length, this.index, this.child, this.height = 75});
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +16,7 @@ class NavButton extends StatelessWidget {
     final difference = (position - desiredPosition).abs();
     final verticalAlignment = 1 - length * difference;
     final opacity = length * difference;
+    
     return Expanded(
       child: InkWell(
         onTap: () {
