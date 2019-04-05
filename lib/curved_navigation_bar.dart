@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+
 import 'src/nav_button.dart';
 import 'src/nav_custom_painter.dart';
 
@@ -12,19 +13,19 @@ class CurvedNavigationBar extends StatefulWidget {
   final ValueChanged<int> onTap;
   final Curve animationCurve;
   final Duration animationDuration;
-  final int height;
+  final double height;
   _CurvedNavigationBarState state = new _CurvedNavigationBarState();
-  CurvedNavigationBar(
-      {Key key,
-      @required this.items,
-      this.initialIndex = 0,
-      this.color = Colors.white,
-      this.buttonBackgroundColor,
-      this.backgroundColor = Colors.blueAccent,
-      this.onTap,
-      this.animationCurve = Curves.easeOut,
-      this.animationDuration = const Duration(milliseconds: 600),
-      this.height = 75})
+
+  CurvedNavigationBar({Key key,
+    @required this.items,
+    this.initialIndex = 0,
+    this.color = Colors.white,
+    this.buttonBackgroundColor,
+    this.backgroundColor = Colors.blueAccent,
+    this.onTap,
+    this.animationCurve = Curves.easeOut,
+    this.animationDuration = const Duration(milliseconds: 600),
+    this.height = 75.0})
       : assert(items != null),
         assert(items.length >= 2),
         assert(0 <= initialIndex && initialIndex < items.length),
@@ -68,7 +69,9 @@ class _CurvedNavigationBarState extends State<CurvedNavigationBar>
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery
+        .of(context)
+        .size;
     return Container(
       color: widget.backgroundColor,
       height: widget.height,
@@ -84,7 +87,7 @@ class _CurvedNavigationBarState extends State<CurvedNavigationBar>
               child: Transform.translate(
                 offset: Offset(
                   0,
-                  -(1 - _buttonHide) * widget.height*0.9375,
+                  (-(1 - _buttonHide) * widget.height * 1.25),
                 ),
                 child: Material(
                   color: widget.buttonBackgroundColor ?? widget.color,
@@ -98,7 +101,7 @@ class _CurvedNavigationBarState extends State<CurvedNavigationBar>
             ),
           ),
           Align(
-            alignment: Alignment.bottomCenter,
+            alignment: Alignment.topCenter,
             child: CustomPaint(
               painter: NavCustomPainter(_pos, _length, widget.color),
               child: Container(
@@ -110,18 +113,18 @@ class _CurvedNavigationBarState extends State<CurvedNavigationBar>
           Align(
             alignment: Alignment.bottomCenter,
             child: SizedBox(
-                height: 100.0,
+                height: widget.height / 0.75,
                 child: Row(
                     children: widget.items.map((item) {
-                  return NavButton(
-                    onTap: _buttonTap,
-                    position: _pos,
-                    length: _length,
-                    index: widget.items.indexOf(item),
-                    child: item,
-                    height: widget.height,
-                  );
-                }).toList())),
+                      return NavButton(
+                        onTap: _buttonTap,
+                        position: _pos,
+                        length: _length,
+                        index: widget.items.indexOf(item),
+                        child: item,
+                        height: widget.height / 1.875,
+                      );
+                    }).toList())),
           ),
         ],
       ),
@@ -137,6 +140,7 @@ class _CurvedNavigationBarState extends State<CurvedNavigationBar>
           duration: widget.animationDuration, curve: widget.animationCurve);
     });
   }
+
   void _buttonTap(int index) {
     if (widget.onTap != null) {
       widget.onTap(index);
