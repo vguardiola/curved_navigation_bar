@@ -12,7 +12,7 @@ class CurvedNavigationBar extends StatefulWidget {
   final ValueChanged<int> onTap;
   final Curve animationCurve;
   final Duration animationDuration;
-
+  _CurvedNavigationBarState state = new _CurvedNavigationBarState();
   CurvedNavigationBar(
       {Key key,
       @required this.items,
@@ -24,12 +24,12 @@ class CurvedNavigationBar extends StatefulWidget {
       this.animationCurve = Curves.easeOut,
       this.animationDuration = const Duration(milliseconds: 600)})
       : assert(items != null),
-        assert(items.length >= 1),
+        assert(items.length >= 2),
         assert(0 <= initialIndex && initialIndex < items.length),
         super(key: key);
 
   @override
-  _CurvedNavigationBarState createState() => _CurvedNavigationBarState();
+  _CurvedNavigationBarState createState() => state;
 }
 
 class _CurvedNavigationBarState extends State<CurvedNavigationBar>
@@ -45,7 +45,7 @@ class _CurvedNavigationBarState extends State<CurvedNavigationBar>
   @override
   void initState() {
     super.initState();
-    _icon = widget.items[widget.initialIndex];
+    _icon = widget.items[0];
     _length = widget.items.length;
     _pos = widget.initialIndex / _length;
     _startingPos = widget.initialIndex / _length;
@@ -100,6 +100,7 @@ class _CurvedNavigationBarState extends State<CurvedNavigationBar>
             child: CustomPaint(
               painter: NavCustomPainter(_pos, _length, widget.color),
               child: Container(
+                color: widget.backgroundColor,
                 height: 75.0,
               ),
             ),
@@ -124,16 +125,19 @@ class _CurvedNavigationBarState extends State<CurvedNavigationBar>
     );
   }
 
-  void _buttonTap(int index) {
-    if (widget.onTap != null) {
-      widget.onTap(index);
-    }
-    final newPosition = index / _length;
+  void moveTo(int index) {
+    var newPosition = index / _length;
     setState(() {
       _startingPos = _pos;
       _endingIndex = index;
       _animationController.animateTo(newPosition,
           duration: widget.animationDuration, curve: widget.animationCurve);
     });
+  }
+  void _buttonTap(int index) {
+    if (widget.onTap != null) {
+      widget.onTap(index);
+    }
+    moveTo(index);
   }
 }
