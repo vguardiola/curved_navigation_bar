@@ -14,7 +14,6 @@ class CurvedNavigationBar extends StatefulWidget {
   final Curve animationCurve;
   final Duration animationDuration;
   final double height;
-  _CurvedNavigationBarState state = new _CurvedNavigationBarState();
 
   CurvedNavigationBar({Key key,
     @required this.items,
@@ -25,17 +24,17 @@ class CurvedNavigationBar extends StatefulWidget {
     this.onTap,
     this.animationCurve = Curves.easeOut,
     this.animationDuration = const Duration(milliseconds: 600),
-    this.height = 75.0})
-      : assert(items != null),
-        assert(items.length >= 2),
-        assert(0 <= initialIndex && initialIndex < items.length),
-        super(key: key);
+    this.height = 75.0}) :
+    assert(items != null),
+    assert(items.length >= 2),
+    assert(0 <= initialIndex && initialIndex < items.length),
+    super(key: key);
 
   @override
-  _CurvedNavigationBarState createState() => state;
+  CurvedNavigationBarState createState() => new CurvedNavigationBarState();
 }
 
-class _CurvedNavigationBarState extends State<CurvedNavigationBar>
+class CurvedNavigationBarState extends State<CurvedNavigationBar>
     with SingleTickerProviderStateMixin {
   double _startingPos;
   int _endingIndex = 0;
@@ -72,12 +71,12 @@ class _CurvedNavigationBarState extends State<CurvedNavigationBar>
     Size size = MediaQuery
         .of(context)
         .size;
-    return Container(
-      color: widget.backgroundColor,
-      height: widget.height,
-      child: Stack(
+    return  SizedBox(
+        height: widget.height,
+        child: Stack(
         overflow: Overflow.visible,
         alignment: Alignment.bottomCenter,
+        fit: StackFit.loose,
         children: <Widget>[
           Positioned(
             bottom: -40,
@@ -101,7 +100,7 @@ class _CurvedNavigationBarState extends State<CurvedNavigationBar>
             ),
           ),
           Align(
-            alignment: Alignment.topCenter,
+            alignment: Alignment.bottomCenter,
             child: CustomPaint(
               painter: NavCustomPainter(_pos, _length, widget.color),
               child: Container(
@@ -128,6 +127,7 @@ class _CurvedNavigationBarState extends State<CurvedNavigationBar>
           ),
         ],
       ),
+
     );
   }
 
